@@ -8,50 +8,51 @@ class App extends Component {
 
 	///state를 이렇게 직접적으로 사용해서는 안된다. why? 모든 작업들이 작동하지 않으므로
 
-	///이 state를
 	state = {};
+	///이 state를
 
 	///컴포넌트가 랜더된 뒤에 5초 후에 hello again으로 업데이트해라(랜더가 다시 일어난다)
 	componentDidMount() {
-		setTimeout(() => {
-			this.setState({
-				movies: [
-					{
-						title: 'herryPoter',
-						poster: 'https://i.ytimg.com/vi/Gnp4OX-WIRo/maxresdefault.jpg',
-					},
-					{
-						title: 'OldBoy',
-						poster: 'Star Wars',
-					},
-					{
-						title: 'Matrix',
-						poster:
-							'https://lh3.googleusercontent.com/TQp6Lb2rArWLcWaUkXyBfecjm8DWrk00rbpU_Z5h3Xe6RNC2Oc3QfHCTi96tud31urnYUeK027Ft',
-					},
-					{
-						title: 'StarWars',
-						poster:
-							'https://lh3.googleusercontent.com/TQp6Lb2rArWLcWaUkXyBfecjm8DWrk00rbpU_Z5h3Xe6RNC2Oc3QfHCTi96tud31urnYUeK027Ft',
-					},
-					{
-						title: 'Transpotting',
-						poster:
-							'https://lh3.googleusercontent.com/TQp6Lb2rArWLcWaUkXyBfecjm8DWrk00rbpU_Z5h3Xe6RNC2Oc3QfHCTi96tud31urnYUeK027Ft',
-					},
-				],
-			});
-		}, 5000);
+		this._getMovies();
 	}
 
-	render() {
-		console.log('Did render');
+	_getMovies = async () => {
+		///callApi 가 실행 완료 될 때 까지, 그 다음 작업(movie)이 일어난다.
+		const movies = await this._callApi();
+		this.setState({
+			movies,
+		});
+	};
+
+	_callApi = () => {
 		return (
-			<div className="App">
-				{this.state.movies.map((movie, index) => {
-					return <Movie title={movie.title} poster={movie.poster} key={index} />;
-				})}
-			</div>
+			fetch('https://yts.am/api/v2/list_movies.json?sort_by=like_counte')
+				.then(response => response.json())
+				.then(json => json.data.movies)
+				// this.this.setState({
+				//   movies: json.data.movies
+				////CALLBACK HELL!)
+				.catch(err => console.log(err))
+		);
+		///ajax를 끝내면 (성공이 아니라 작업완료) then을 실행하고,
+		///오류가나면 오류를 콘솔에 찍어라
+		///then function은 항상 1가지의 attribute만 준다. (object)
+		///ReadableStream 바이트로 되어있다 => 제이슨으로 바꾸자
+	};
+
+	_renderMovies = () => {
+		const movies = this.state.movies.map((movie, id) => {
+			console.log(movie);
+			return <Movie title={movie.title} poster={movie.large_cover_image} key={id} />;
+		});
+		return movies;
+	};
+
+	render() {
+		return (
+			//this.state.movies data가 있냐? 있으면 함수실행, 없으면 로딩중 문구
+			//_언더스코어: 리액트 기능(내 함수)
+			<div className="App">{this.state.movies ? this._renderMovies() : 'Loading'}</div>
 		);
 	}
 }
