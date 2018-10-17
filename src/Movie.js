@@ -21,11 +21,24 @@ import './Movie.css';
 ///class 안에는 this를 가지고 있으나
 ///functional 컴포넌트에서는 this가 필요없다. 이미 props를 쓰니까
 
-function Movie({ title, poster }) {
+function Movie({ title, poster, genres, synopsis }) {
+	console.log(typeof genres);
 	return (
-		<div>
-			<MoviePoster poster={poster} />
-			<h1>{title}</h1>
+		<div className="Movie">
+			<div className="Movie__Columns">
+				<MoviePoster poster={poster} alt={title} />
+			</div>
+			<div className="Movie__Columns">
+				<h1>{title}</h1>
+				<div className="Movie__Genres">
+					{typeof genres === 'object' ? (
+						genres.map((genre, index) => <MovieGenre genre={genre} key={index} />)
+					) : (
+						<MovieGenre genre="Undefined" />
+					)}
+				</div>
+				<p className="Movie__Synopsis">{synopsis}</p>
+			</div>
 		</div>
 	);
 }
@@ -33,6 +46,7 @@ function Movie({ title, poster }) {
 Movie.propTypes = {
 	title: PropTypes.string.isRequired,
 	poster: PropTypes.string.isRequired,
+	synopsis: PropTypes.string.isRequired,
 };
 
 // class MoviePoster extends Component {
@@ -49,12 +63,21 @@ Movie.propTypes = {
 //this mean, componentWillMount(), componentDidMount(), componentWillReceiveUpdate(), shouldComponentUpdate(), componentWillUpdate(), componentDidUpdate(), render()가 필요없다.
 // one props one html
 //state가 없다면, render기능과 라이프사이클이 없다.
-function MoviePoster({ poster }) {
-	return <img src={poster} alt="Movie Poster" />;
+function MoviePoster({ poster, alt }) {
+	return <img src={poster} alt={alt} title={alt} className="Movie__Poster" />;
 }
+
+function MovieGenre({ genre }) {
+	return <span className="Movie__Genre">{genre} </span>;
+}
+
+MovieGenre.propTypes = {
+	genre: PropTypes.string.isRequired,
+};
 
 MoviePoster.propTypes = {
 	poster: PropTypes.string.isRequired,
+	alt: PropTypes.string.isRequired,
 };
 
 export default Movie;
