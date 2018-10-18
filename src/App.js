@@ -26,7 +26,7 @@ class App extends Component {
 
 	_callApi = () => {
 		return (
-			fetch('https://yts.am/api/v2/list_movies.json?sort_by=like_counte')
+			fetch('https://yts.am/api/v2/list_movies.json?sort_by=download_count')
 				.then(response => response.json())
 				.then(json => json.data.movies)
 				// this.this.setState({
@@ -57,10 +57,13 @@ class App extends Component {
 	};
 
 	render() {
+		const { movies } = this.state;
 		return (
 			//this.state.movies data가 있냐? 있으면 함수실행, 없으면 로딩중 문구
 			//_언더스코어: 리액트 기능(내 함수)
-			<div className="App">{this.state.movies ? this._renderMovies() : 'Loading'}</div>
+			<div className={movies ? 'App' : 'App--loading'}>
+				{this.state.movies ? this._renderMovies() : 'Loading'}
+			</div>
 		);
 	}
 }

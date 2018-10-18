@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './Movie.css';
+import LinesEllipsis from 'react-lines-ellipsis';
 
 // class Movie extends Component {
 // 	static propTypes = {
@@ -25,10 +26,10 @@ function Movie({ title, poster, genres, synopsis }) {
 	console.log(typeof genres);
 	return (
 		<div className="Movie">
-			<div className="Movie__Columns">
+			<div className="Movie__Column">
 				<MoviePoster poster={poster} alt={title} />
 			</div>
-			<div className="Movie__Columns">
+			<div className="Movie__Column">
 				<h1>{title}</h1>
 				<div className="Movie__Genres">
 					{typeof genres === 'object' ? (
@@ -37,7 +38,14 @@ function Movie({ title, poster, genres, synopsis }) {
 						<MovieGenre genre="Undefined" />
 					)}
 				</div>
-				<p className="Movie__Synopsis">{synopsis}</p>
+				<LinesEllipsis
+					className="Movie__Synopsis"
+					text={synopsis}
+					maxLine="10"
+					ellipsis="..."
+					trimRight
+					basedOn="letters"
+				/>
 			</div>
 		</div>
 	);
