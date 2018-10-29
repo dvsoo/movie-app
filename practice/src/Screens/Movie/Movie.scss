@@ -1,0 +1,42 @@
+.MovieContainer {
+	background-color: #fff;
+	width: 40%;
+	display: flex;
+	justify-content: space-around;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	margin-bottom: 50px;
+	box-shadow: 0 8px 38px rgba(133, 133, 133, 0.3), 0 5px 12px rgba(133, 133, 133, 0.22);
+	padding: 0 20px;
+	text-overflow: ellipsis;
+}
+
+.Movie__Column {
+	width: 30%;
+	box-sizing: border-box;
+	text-overflow: ellipsis;
+}
+
+.Movie__Column:last-child {
+	width: 60%;
+	padding: 20px 0;
+}
+
+.MovieTitle {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.Movie__Genre {
+	margin-top: 30px;
+	margin-bottom: 30px;
+	color: #bbb;
+}
+
+.Movie__Poster {
+	position: relative;
+	top: -20px;
+	img {
+		height: 200px;
+	}
+}
